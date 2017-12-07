@@ -21,9 +21,6 @@ module.exports = {
         historyApiFallback: true
     },
 
-    // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
-
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: [".ts", ".tsx", ".js", ".json"]
@@ -39,8 +36,8 @@ module.exports = {
 
             { test: /\.scss$/, loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader']) },
             // [
-            //     { loader: "style-loader" }, 
-            //     { loader: "css-loader"   }, 
+            //     { loader: "style-loader" },
+            //     { loader: "css-loader"   },
             //     { loader: "sass-loader"  }
             // ]
             {
@@ -67,17 +64,19 @@ module.exports = {
         new webpack.optimize.CommonsChunkPlugin({
             names: ['vendor', 'manifest']
         }),
-        new ExtractTextPlugin({ // define where to save the file
-          filename: '[name].css',
-          allChunks: true,
-        }),
         new HtmlWebpackPlugin({
-            template: 'src/index.develop.html'
+            template: 'src/index.production.html'
+        }),
+        new ExtractTextPlugin({ // define where to save the file
+            filename: '[name].css',
+            allChunks: true,
         }),
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify('production')
             }
-        })
+        }),
+        new webpack.optimize.UglifyJsPlugin(),
+
     ],
 };
